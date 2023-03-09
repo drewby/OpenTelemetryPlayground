@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapi
+  namespace: apps
+  labels:
+    app: todoapi-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapi-app
+  template:
+    metadata:
+      labels:
+        app: todoapi-app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "5000"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "todoapi"
+        dapr.io/app-port: "5000"
+        dapr.io/metrics-port: "9090"
+        dapr.io/config: "dapr-config"
+    spec:
+      containers:
+      - name: todoapi
+        image: registry.local:5555/todoapi:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: 1
+            memory: 1G
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        livenessProbe:
+          httpGet:
+             path: /health/live
+             port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 10       
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          - name: NAMESPACE
+            value: apps
+          - name: APPNAME
+            value: todoapi-app

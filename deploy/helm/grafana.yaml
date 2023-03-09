@@ -1,0 +1,15 @@
+persistence:
+  enabled: true
+extraVolumeMounts:
+  - name: dashboards
+    mountPath: /etc/grafana/provisioning/dashboards
+    hostPath: /otel/deploy/grafana/dashboards
+    readOnly: false
+  - name: datasources
+    mountPath: /etc/grafana/provisioning/datasources
+    hostPath: /otel/deploy/grafana/datasources
+    readOnly: false
+admin:
+  existingSecret: grafanalogin
+  userKey: user
+  passwordKey: password

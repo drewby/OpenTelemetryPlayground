@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: nginx
+  name: todoapi
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /v1.0/invoke/todoapi.apps/method/api/$2
+    nginx.org/mergeable-ingress-type: "minion"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /api(/|$)(.+)
+        pathType: Prefix
+        backend:
+          service:
+            name: ingress-nginx-dapr
+            port:
+              number: 3500

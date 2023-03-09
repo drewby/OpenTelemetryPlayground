@@ -1,0 +1,12 @@
+controller:
+  config: 
+    enable-opentracing: "false"
+    jaeger-collector-host: jaeger-agent.jaeger.svc.cluster.local
+    jaeger-propagation-format: w3c
+  podAnnotations:
+    dapr.io/enabled: "true"
+    dapr.io/app-id: "ingress-nginx"
+    dapr.io/app-port: "80"
+    dapr.io/metrics-port: "9090"
+    dapr.io/sidecar-listen-addresses: "0.0.0.0"
+    dapr.io/config: "dapr-config"

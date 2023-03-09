@@ -1,0 +1,27 @@
+{
+  "name": "todospa",
+  "version": "1.0.0",
+  "description": "This is a simple web application that allows users to manage a to-do list. The application is built using the [Preact](https://preactjs.com/) library, which is a fast and lightweight alternative to React. The application communicates with a backend REST API to manage the to-do items and uses a [ZipKin](https://zipkin.io/) endpoint to provide distributed tracing.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opentelemetry/api": "^1.4.0",
+    "@opentelemetry/auto-instrumentations-web": "^0.31.1",
+    "@opentelemetry/context-zone": "^1.9.1",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.35.1",
+    "@opentelemetry/instrumentation": "^0.35.1",
+    "@opentelemetry/resources": "^1.9.1",
+    "@opentelemetry/sdk-trace-base": "^1.9.1",
+    "@opentelemetry/sdk-trace-web": "^1.9.1",
+    "@opentelemetry/semantic-conventions": "^1.9.1",
+    "htm": "^3.1.1",
+    "preact": "^10.11.3"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
+  }
+}

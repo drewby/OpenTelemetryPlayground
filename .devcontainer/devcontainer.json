@@ -1,0 +1,39 @@
+{
+	"name": "OpenTelemetryPlayground",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"hostRequirements": {
+		"cpus": 8,
+		"memory": "8gb"
+	},
+	// "workspaceFolder": "/workspace/DaprSecure",
+	"forwardPorts": [
+		8080,
+		30000,
+		30001,
+		30002
+	],
+	"runArgs": [
+		"--init",
+		"--privileged"
+	],
+	"containerEnv": {
+		"ASPNETCORE_ENVIRONMENT": "Development"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/dotnet:1": {}
+	},
+	"onCreateCommand": "/bin/bash -c .devcontainer/on-create.sh",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.makefile-tools",
+				"bierner.markdown-mermaid",
+				"GitHub.copilot"
+			]
+		}
+	}
+}

@@ -1,0 +1,13 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  namespace: nginx
+  name: dapr-config
+spec: 
+  tracing:
+    samplingRate: "1"
+    otel:
+      endpointAddress: "jaeger-collector.jaeger:4318"
+      isSecure: false
+      protocol: http
+

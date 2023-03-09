@@ -1,0 +1,50 @@
+# config file version
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: Graphite
+    orgId: 1
+
+datasources:
+- name: Prometheus
+  uid: prom
+  type: prometheus
+  access: proxy
+  isDefault: true
+  url: http://prometheus-server.prometheus
+  # don't use this in prod
+  editable: true
+
+- name: Loki
+  type: loki
+  uid: loki
+  url: http://loki:3100
+  # jsonData:
+  #   httpHeaderName1: 'X-Scope-OrgID'
+  # secureJsonData:
+  #   httpHeaderValue1: '1'
+  editable: true
+
+- name: Jaeger
+  type: jaeger
+  uid: jaeger
+  access: proxy
+  url: http://jaeger-query.jaeger:16686/
+  editable: true
+  jsonData:
+    tracesToLogs:
+      # Field with internal link pointing to a logs data source in Grafana.
+      # datasourceUid value must match the datasourceUid value of the logs data source.
+      datasourceUid: 'loki'
+      tags: []
+      mappedTags: [{ key: 'service.namespace', value: 'namespace' } ]
+      mapTagNamesEnabled: true
+      filterByTraceID: true
+      filterBySpanID: true
+    # tracesToMetrics:
+    #   datasourceUid: 'prom'
+    #   tags: [{ key: 'service.name', value: 'service' }, { key: 'job' }]
+    #   queries:
+    #     - name: 'Sample query'
+    #       query: 'sum(rate(tempo_spanmetrics_latency_bucket{$__tags}[5m]))'

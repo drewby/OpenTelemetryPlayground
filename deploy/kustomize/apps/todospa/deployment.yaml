@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todospa
+  namespace: apps
+  labels:
+    app: todospa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todospa
+  template:
+    metadata:
+      labels:
+        app: todospa
+    spec:
+      volumes:
+        - name: html
+          hostPath: 
+            path: /otel/deploy/web
+      containers:
+      - name: todospa
+        image: nginx
+        imagePullPolicy: Always
+        volumeMounts:
+          - name: html
+            mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 1
+            memory: 1G
