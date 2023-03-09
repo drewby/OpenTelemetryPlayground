@@ -28,9 +28,12 @@ The goals of this project are as follows:
 * Create extensions to enhance the API and/or SDK for .NET.
 * Implement a sampling strategy using the OpenTelemetry Collector.
 
+<img src="./docs/images/trace-video.gif" alt="Demo video of distributed tracing" title="Distributed tracing" width=300 style="margin-left: 40px;">
+
 ## Documentation
 
-TBD
+[Additional Documentation is Here](./docs/README.md)
+
 ## Getting Started
 
 Here's how you can get started with this project. 
