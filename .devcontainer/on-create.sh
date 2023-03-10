@@ -31,6 +31,8 @@ if [ -z "$DONE" ]; then
   exit 1
 fi
 
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.yaml
+
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo add prometheus https://prometheus-community.github.io/helm-charts
 helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
@@ -63,12 +65,12 @@ else
     echo "jaeger already installed."
 fi
 
-if ! helm status opentelemetry-collector -n opentelemetry 1>/dev/null 2>&1; then
-    echo "Installing opentelemetry-collector into $CLUSTER_NAME cluster"
-    helm install opentelemetry-collector open-telemetry/opentelemetry-collector -n opentelemetry --create-namespace \
-        -f $PWD/deploy/helm/opentelemetry-collector.yaml
+if ! helm status opentelemetry-operator -n opentelemetry 1>/dev/null 2>&1; then
+    echo "Installing opentelemetry-operator into $CLUSTER_NAME cluster"
+    helm install opentelemetry-operator open-telemetry/opentelemetry-operator -n opentelemetry --create-namespace \
+        -f $PWD/deploy/helm/opentelemetry-operator.yaml
 else
-    echo "opentelemetry-collector already installed."
+    echo "opentelemetry-operator already installed."
 fi
 
 if ! helm status grafana -n grafana 1>/dev/null 2>&1; then
@@ -115,6 +117,8 @@ fi
 /usr/local/share/nvm/install.sh; nvm install --lts
 
 make all
+
+kubectl apply -k $PWD/deploy/kustomize/otel
 
 kubectl apply -k $PWD/deploy/kustomize/nodeports
 kubectl apply -k $PWD/deploy/kustomize/nginx

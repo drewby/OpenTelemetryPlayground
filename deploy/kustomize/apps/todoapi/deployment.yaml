@@ -23,6 +23,7 @@ spec:
         dapr.io/app-port: "5000"
         dapr.io/metrics-port: "9090"
         dapr.io/config: "dapr-config"
+        sidecar.opentelemetry.io/inject: "opentelemetry/sidecar"
     spec:
       containers:
       - name: todoapi
