@@ -1,4 +1,3 @@
-// using Serilog;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Exporter.JsonConsole;
 
@@ -16,24 +15,11 @@ public static class LoggingExtension
                 (options) =>
                 {
                     options.IncludeScopes = true;
-                    // options.RecordException = true;
+                    options.IncludeFormattedMessage = true;
+                    options.ParseStateValues = true;
                     options.AddJsonConsoleExporter();
                 }
             );
-
-
-
-            //     var logger = new LoggerConfiguration()
-            //         .ReadFrom.Configuration(builder.Configuration, SERILOG_CONFIG)
-            //         .Enrich.WithProperty("ServiceVersion", OpsConfig.Current.ServiceVersion)
-            //         .Enrich.WithProperty("ServiceName", OpsConfig.Current.ServiceName)
-            //         .Enrich.WithProperty("ServiceNamespace", OpsConfig.Current.ServiceNamespace)
-            //         .Enrich.WithProperty("ServiceInstanceId", OpsConfig.Current.ServiceInstanceId)
-            //         .Enrich.WithProperty("RevisionHash", OpsConfig.Current.RevisionHash)
-            //         .Enrich.With<LoggingTraceEnricher>()
-            //         .CreateLogger();
-
-            //     builder.Host.UseSerilog(logger);
         }
 
         return builder;
