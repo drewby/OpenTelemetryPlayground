@@ -176,8 +176,8 @@ function App() {
         render() {
             return html`<li>
                 <div style="color:red">Service not ready.</div>
-                <div>Check that the services in the cluster are running correctly. After intializing the 
-                cluster, <b>deploy/appregister.sh</b> must be run to configure Azure AD App Registrations.</div>
+                <div>Check that the services are running in the cluster. From a terminal in the
+                dev container, you can use <b>k9s</b> or <b>kubectl</b> to check on services.</div>
             </li>`
         }
     }
