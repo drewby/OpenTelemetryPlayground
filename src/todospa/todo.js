@@ -168,6 +168,7 @@ function App() {
             return html`<div>
             <label for="traceid-input">TraceId: </label>
             <input type="text" value="${lastTraceId}" placeholder="Generated with request" readonly="true" />
+            <a href="${config.JAEGER_URL}/trace/${lastTraceId}" target="_blank">View in Jaeger</a>
             </div>`
         }
     }
