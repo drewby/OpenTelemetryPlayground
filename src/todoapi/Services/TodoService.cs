@@ -9,7 +9,7 @@ public class TodoService
     private readonly ILogger<TodoService> _logger;
     private readonly DaprClient _daprClient;
 
-     /// <summary>
+    /// <summary>
     /// Initializes a new instance of the <see cref="TodoService"/> class with the specified logger and Dapr client.
     /// </summary>
     /// <param name="logger">The logger instance to use for logging.</param>
@@ -17,7 +17,7 @@ public class TodoService
     public TodoService(ILogger<TodoService> logger, DaprClient daprClient)
     {
         _logger = logger;
-        _daprClient = daprClient;       
+        _daprClient = daprClient;
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public class TodoService
         {
             throw new Exception("Unable to retrieve todo list");
         }
-        
+
         return todoList;
     }
 
@@ -76,8 +76,14 @@ public class TodoService
     {
         var todoList = await GetList();
 
-        var id = todoList.Max(t => t.Id) + 1;
-        todo.Id = id;
+        if (todoList.Count == 0)
+        {
+            todo.Id = 1;
+        }
+        else
+        {
+            todo.Id = todoList.Max(t => t.Id) + 1;
+        }
 
         todoList.Add(todo);
 

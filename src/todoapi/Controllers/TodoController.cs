@@ -20,7 +20,7 @@ public class TodoController
     public TodoController(ILogger<TodoController> logger, TodoService todos)
     {
         _logger = logger;
-        _todos = todos;    
+        _todos = todos;
     }
 
     /// <summary>
@@ -32,7 +32,21 @@ public class TodoController
     public async Task<IActionResult> Get()
     {
         _logger.LogInformation($"TodoController.Get() called");
-        return new ObjectResult(await _todos.GetList());
+        var result = await _todos.GetList();
+
+        // Throw an exception randomly 10% of requests
+        if (new Random().Next(10) == 0)
+        {
+            throw new Exception("Random exception");
+        }
+
+        // Sleep for 2 seconds randomly 10% of requests
+        if (new Random().Next(10) == 0)
+        {
+            Thread.Sleep(2000);
+        }
+
+        return new ObjectResult(result);
     }
 
     /// <summary>
@@ -46,9 +60,12 @@ public class TodoController
     public async Task<IActionResult> Get(int id)
     {
         _logger.LogInformation($"TodoController.Get({id}) called");
-        try {
+        try
+        {
             return new ObjectResult(await _todos.GetTodo(id));
-        } catch (TodoNotFoundException) {
+        }
+        catch (TodoNotFoundException)
+        {
             return new NotFoundResult();
         }
     }
@@ -63,7 +80,7 @@ public class TodoController
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] Todo todo)
     {
-        _logger.LogInformation($"TodoController.Post() called with { todo.Name }");
+        _logger.LogInformation($"TodoController.Post() called with {todo.Name}");
         if (string.IsNullOrWhiteSpace(todo.Name))
         {
             return new BadRequestResult();
@@ -89,9 +106,12 @@ public class TodoController
             return new BadRequestResult();
         }
 
-        try {
+        try
+        {
             await _todos.Update(todo);
-        } catch (TodoNotFoundException) {
+        }
+        catch (TodoNotFoundException)
+        {
             return new NotFoundResult();
         }
 
@@ -108,9 +128,12 @@ public class TodoController
     public async Task<IActionResult> Delete(int id)
     {
         _logger.LogInformation($"TodoController.Delete({id}) called");
-        try {
+        try
+        {
             await _todos.Delete(id);
-        } catch (TodoNotFoundException) {
+        }
+        catch (TodoNotFoundException)
+        {
             return new NotFoundResult();
         }
         return new OkResult();
