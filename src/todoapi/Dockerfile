@@ -19,6 +19,8 @@ ARG BUILDTIME
 ARG VERSION
 ARG REVISION
 
+RUN apt-get update; apt-get install curl -y
+
 WORKDIR /app
 COPY --from=build-env /app/out .
 

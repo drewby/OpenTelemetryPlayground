@@ -19,6 +19,7 @@ function App() {
     const [todos, setTodos] = useState([]);
     const [lastTraceId, setTraceId] = useState("");
     const [serviceNotReady, setServiceNotReady] = useState(false);
+    const [loop, setLoop] = useState(null);
 
     let newTodoName = ""
 
@@ -65,7 +66,7 @@ function App() {
                     span.end();
                 })
                 .catch(error => {
-                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: error });
+                    span.setStatus({ code: api.SpanStatusCode.ERROR });
                     span.end();
                 });
         });
@@ -77,14 +78,17 @@ function App() {
 
             const newTodo = { id: 0, name: newTodoName, isComplete: false };
             return callApi("POST", "/api/Todo", newTodo)
-                .then(response => {
+                .then(response => response.json())
+                .then(todo => {
+                    newTodo.id = todo.id;
                     return refreshTodos();
                 })
                 .then(() => {
                     span.end();
+                    return newTodo;
                 })
                 .catch(error => {
-                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: error });
+                    span.setStatus({ code: api.SpanStatusCode.ERROR });
                     span.end();
                 });
         });
@@ -103,7 +107,7 @@ function App() {
                     span.end();
                 })
                 .catch(error => {
-                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: error });
+                    span.setStatus({ code: api.SpanStatusCode.ERROR });
                     span.end();
                 });
         });
@@ -121,10 +125,35 @@ function App() {
                     span.end();
                 })
                 .catch(error => {
-                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: error });
+                    span.setStatus({ code: api.SpanStatusCode.ERROR });
                     span.end();
                 });
         });
+    }
+
+    function startStopLoop() {
+        // no span is needed
+        if (loop) {
+            clearInterval(loop);
+            setLoop(null);
+        }
+        else {
+            let newLoop = setInterval(() => {
+                // set newTodoName to a random string
+                newTodoName = Math.random().toString(36).substring(7);
+
+                addTodo()
+                    .then((newTodo) => {
+                        return updateTodoIsComplete(newTodo, true).then(() => {
+                            return newTodo;
+                        })
+                    })
+                    .then((newTodo) => {
+                        return deleteTodo(newTodo.id)
+                    })
+            }, 500);
+            setLoop(newLoop);
+        }
     }
 
     function onInputTodoName(e) {
@@ -134,7 +163,7 @@ function App() {
     class Header extends Component {
         render() {
             return html`<header>
-            <h1>Todo App</h1>
+            <h1>Todo App</h1><${Loop} />
         </header>`
         }
     }
@@ -180,6 +209,19 @@ function App() {
                 <div>Check that the services are running in the cluster. From a terminal in the
                 dev container, you can use <b>k9s</b> or <b>kubectl</b> to check on services.</div>
             </li>`
+        }
+    }
+
+    // create a component to start and stop loop
+    class Loop extends Component {
+        render() {
+            return html`<div>
+            <button onClick=${() => {
+                    startStopLoop();
+                }}>
+            ${loop ? "Stop" : "Start"} Loop
+            </button>
+            </div>`
         }
     }
 
