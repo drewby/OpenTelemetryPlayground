@@ -7,12 +7,63 @@ spec:
     exporters:
       otlphttp:
         endpoint: http://jaeger-collector.jaeger:4318
+      prometheusremotewrite:
+        endpoint: http://prometheus-server.prometheus/api/v1/write
+        tls:
+          insecure: true
+
     processors:
+      batch:
       transform:
         trace_statements:
           - context: span
             statements:
               - set(attributes["from_shared"], "true")
+      tail_sampling:
+        decision_wait: 5s
+        num_traces: 100
+        expected_new_traces_per_sec: 10
+        policies:
+          [
+            {
+              name: composite-policy,
+              type: composite,
+              composite:
+                {
+                  max_total_spans_per_second: 200,
+                  policy_order: [errors, latency, tenpercent],
+                  composite_sub_policy:
+                    [
+                      {
+                        name: errors,
+                        type: status_code,
+                        status_code: {status_codes: [ERROR, UNSET]}
+                      },
+                      {
+                        name: latency,
+                        type: latency,
+                        latency: { threshold_ms: 2000 }
+                      },
+                      {
+                        name: tenpercent,
+                        type: probabilistic,
+                        probabilistic: {sampling_percentage: 10}
+                      }
+                    ],
+                  rate_allocation:
+                    [
+                      {
+                        policy: errors,
+                        percent: 50
+                      },
+                      {
+                        policy: latency,
+                        percent: 25
+                      }
+                    ]
+                }
+            }
+          ]
     receivers:
       otlp:
         protocols:
@@ -25,9 +76,20 @@ spec:
               # allowed_headers:
               #   - Example-Header
               max_age: 7200
+      prometheus/own_metrics:
+        config:
+          scrape_configs:
+            - job_name: otel-collector
+              scrape_interval: 10s
+              static_configs:
+                - targets: [0.0.0.0:8888]
     service:
       pipelines:
         traces:
           receivers: [otlp]
-          processors: [transform]
+          processors: [transform,tail_sampling]
           exporters: [otlphttp]
+        metrics:
+          receivers: [otlp,prometheus/own_metrics]
+          processors: []
+          exporters: [prometheusremotewrite]

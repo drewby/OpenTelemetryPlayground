@@ -2,6 +2,8 @@ server:
   persistentVolume:
     enabled: false
   retention: "1d"
+  extraArgs: 
+    enable-feature: remote-write-receiver
   global:
     ## How frequently to scrape targets by default
     ##
