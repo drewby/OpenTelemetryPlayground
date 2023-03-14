@@ -100,6 +100,9 @@ In addition to the above tools, the project also includes a `Makefile` for easie
 * **make deploy-todaapi**: Deploys the todoapi component to the cluster
 * **make all-todoapi**: Runs both *build* and *deploy*
 * **make all**: Runs both *all-todoapi* and  *build-todospa* to build and deploy changes to both the frontend and backend components
+* **make test-todoapi**: Runs tests for todoapi
+* **make test-jsonconsoleexporter**: Runs tests for OpenTelemetry.Exporter.JsonConsole.Tests
+* **make test**: Runs tests for all projects a produces coverage report in `coverage` folder
 
 ## How to Contribute
 
