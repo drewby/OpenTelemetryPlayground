@@ -33,7 +33,7 @@ public class TodoServiceTests
                        .ReturnsAsync(todoList);
 
         // Act
-        var result = await _todoService.GetList();
+        var result = await _todoService.GetListAsync();
 
         // Assert
         Assert.Equal(todoList, result);
@@ -47,7 +47,7 @@ public class TodoServiceTests
                        .ReturnsAsync(It.IsAny<List<Todo>>());
 
         // Act and assert
-        await Assert.ThrowsAsync<Exception>(() => _todoService.GetList());
+        await Assert.ThrowsAsync<Exception>(() => _todoService.GetListAsync());
     }
 
     [Fact]
@@ -65,7 +65,7 @@ public class TodoServiceTests
                        .ReturnsAsync(todoList);
 
         // Act
-        var result = await _todoService.GetTodo(2);
+        var result = await _todoService.GetTodoAsync(2);
 
         // Assert
         Assert.Equal(todoList[1], result);
@@ -86,7 +86,7 @@ public class TodoServiceTests
                        .ReturnsAsync(todoList);
 
         // Act and assert
-        await Assert.ThrowsAsync<TodoNotFoundException>(() => _todoService.GetTodo(4));
+        await Assert.ThrowsAsync<TodoNotFoundException>(() => _todoService.GetTodoAsync(4));
     }
 
     [Fact]
@@ -109,7 +109,7 @@ public class TodoServiceTests
                        .Returns(Task.CompletedTask);
 
         // Act
-        var result = await _todoService.Add(todo);
+        var result = await _todoService.AddAsync(todo);
 
         // Assert
         Assert.Equal(todo, result);
@@ -137,7 +137,7 @@ public class TodoServiceTests
                           .Returns(Task.CompletedTask);
 
         // Act
-        await _todoService.Update(todo);
+        await _todoService.UpdateAsync(todo);
 
         // Assert
         // Ensure that the values of todoList[1] are updated
@@ -166,7 +166,7 @@ public class TodoServiceTests
                        .Returns(Task.CompletedTask);
 
         // Act
-        await _todoService.Delete(2);
+        await _todoService.DeleteAsync(2);
 
         // Assert
         Assert.Equal(2, todoList.Count);

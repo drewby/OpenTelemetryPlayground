@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\todoapi\todoapi.csproj" />
+    <ProjectReference Include="..\..\src\ops\Ops.csproj" />
   </ItemGroup>
 
 </Project>
