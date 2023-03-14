@@ -39,6 +39,15 @@ public class StartupBackgroundService : BackgroundService
     /// <param name="stoppingToken">The cancellation token to use for stopping the background service.</param>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await StartupAsync(stoppingToken);
+    }
+
+    /// <summary>
+    /// Executes the startup tasks. Public available for testing.
+    /// </summary>
+    /// <param name="stoppingToken">The cancellation token to use for stopping the background service.</param>
+    public async Task StartupAsync(CancellationToken stoppingToken)
+    {
         try
         {
             // wait for dapr sidecar to be ready

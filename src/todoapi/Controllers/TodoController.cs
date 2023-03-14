@@ -10,17 +10,22 @@ using Microsoft.AspNetCore.Authorization;
 public class TodoController
 {
     private readonly ILogger<TodoController> _logger;
-    private readonly TodoService _todos;
+    private readonly ITodoService _todos;
+    private readonly bool _returnRandomException;
+    private readonly bool _delayRandomRequest;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TodoController"/> class with the specified logger and todo service.
     /// </summary>
     /// <param name="logger">The logger instance to use for logging.</param>
     /// <param name="todos">The todo service instance to use for managing todo items.</param>
-    public TodoController(ILogger<TodoController> logger, TodoService todos)
+    public TodoController(ILogger<TodoController> logger, ITodoService todos)
     {
         _logger = logger;
         _todos = todos;
+
+        _returnRandomException = Environment.GetEnvironmentVariable("RETURN_RANDOM_EXCEPTION") != null;
+        _delayRandomRequest = Environment.GetEnvironmentVariable("DELAY_RANDOM_REQUEST") != null;
     }
 
     /// <summary>
@@ -32,16 +37,16 @@ public class TodoController
     public async Task<IActionResult> Get()
     {
         _logger.LogInformation($"TodoController.Get() called");
-        var result = await _todos.GetList();
+        var result = await _todos.GetListAsync();
 
         // Throw an exception randomly 10% of requests
-        if (new Random().Next(10) == 0)
+        if (_returnRandomException && new Random().Next(10) == 0)
         {
             throw new Exception("Random exception");
         }
 
         // Sleep for 2 seconds randomly 10% of requests
-        if (new Random().Next(10) == 0)
+        if (_delayRandomRequest && new Random().Next(10) == 0)
         {
             Thread.Sleep(2000);
         }
@@ -62,7 +67,7 @@ public class TodoController
         _logger.LogInformation($"TodoController.Get({id}) called");
         try
         {
-            return new ObjectResult(await _todos.GetTodo(id));
+            return new ObjectResult(await _todos.GetTodoAsync(id));
         }
         catch (TodoNotFoundException)
         {
@@ -86,7 +91,7 @@ public class TodoController
             return new BadRequestResult();
         }
 
-        return new ObjectResult(await _todos.Add(todo));
+        return new ObjectResult(await _todos.AddAsync(todo));
     }
 
     /// <summary>
@@ -108,7 +113,7 @@ public class TodoController
 
         try
         {
-            await _todos.Update(todo);
+            await _todos.UpdateAsync(todo);
         }
         catch (TodoNotFoundException)
         {
@@ -130,7 +135,7 @@ public class TodoController
         _logger.LogInformation($"TodoController.Delete({id}) called");
         try
         {
-            await _todos.Delete(id);
+            await _todos.DeleteAsync(id);
         }
         catch (TodoNotFoundException)
         {
