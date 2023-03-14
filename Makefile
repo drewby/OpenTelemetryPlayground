@@ -45,3 +45,12 @@ all-todoapi: build-todoapi deploy-todoapi
 # all-backend: build-backend deploy-backend
 
 all: all-todoapi build-todospa
+
+test-todoapi:
+	dotnet test tst/todoapi.Tests --collect:"XPlat Code Coverage" 
+
+test-jsonconsoleexporter:
+	dotnet test tst/OpenTelemetry.Exporter.JsonConsole.Tests --collect:"XPlat Code Coverage" 
+
+test: test-todoapi test-jsonconsoleexporter
+	~/.dotnet/tools/reportgenerator "-reports:tst/**/TestResults/**/*.xml" -targetdir:coverage -reporttypes:Html

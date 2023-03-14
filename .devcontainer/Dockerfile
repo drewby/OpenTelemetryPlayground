@@ -24,6 +24,7 @@ RUN . $NVM_DIR/nvm.sh; nvm install --lts; npm install -g parcel
 # set up user tools
 RUN curl -sS https://webinstall.dev/k9s | bash
 RUN curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | /bin/bash
+RUN dotnet tool install -g dotnet-reportgenerator-globaltool
 
 # set up oh-my-zsh
 RUN sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended &> /dev/null

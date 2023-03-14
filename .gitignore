@@ -5,3 +5,5 @@ node_modules/
 .parcel-cache/
 /deploy/web/*
 !/deploy/web/.gitkeep
+TestResults/
+coverage/
