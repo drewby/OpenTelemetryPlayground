@@ -21,7 +21,7 @@ builder.Services.AddHostedService<StartupBackgroundService>();
 
 // Add a Dapr client and Todo service
 builder.Services.AddSingleton<Dapr.Client.DaprClient>(new Dapr.Client.DaprClientBuilder().Build());
-builder.Services.AddSingleton<TodoService>();
+builder.Services.AddSingleton<ITodoService, TodoService>();
 
 // Add a utility for getting the current httpContext
 builder.Services.AddHttpContextAccessor();
