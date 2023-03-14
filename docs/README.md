@@ -1,5 +1,9 @@
 # Documentation
 
+## OpenTelemetry
+
+* [OpenTelemetry Collector Configurations](../deploy/kustomize/otel/README.md) 
+
 ## Application Code
 
 * [ToDo Web Application - Single Page Application (HTML/CSS/JS)](../src/todospa/README.md)
