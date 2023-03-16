@@ -108,7 +108,7 @@ In addition to the above tools, the project also includes a `Makefile` for easie
 
 The project is open to Microsoft FTE only at this time.
 
-We welcome and appreciate contributions from the Microsoft community. There are several ways to contribute to this project, such as fixing bugs, improving documentation, adding new features, and more. If you are interested in contributing, please follow the guidelines below.
+We welcome and appreciate contributions from the  community. There are several ways to contribute to this project, such as fixing bugs, improving documentation, adding new features, and more. If you are interested in contributing, please follow the guidelines below.
 
 ### Issues
 
